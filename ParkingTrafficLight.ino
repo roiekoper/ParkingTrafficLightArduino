@@ -20,6 +20,7 @@ int sensorValue = 0; // variable to store the value coming from the sensor
 
 int isEvning = 0;
 
+// setup function
 void setup() {
   Serial.begin(9600);
   pinMode(IN_RED_LED_PIN,OUTPUT);
@@ -37,6 +38,7 @@ void setup() {
   isEvning = (sensorValue / 1000);
 }
 
+// loop function
 void loop() {
   inButtonState = digitalRead(IN_BUTTON_PIN);
   //Serial.println(inButtonState);
@@ -48,6 +50,7 @@ void loop() {
 
   Serial.println(inButtonState == LOW && isEvning);
 
+  // sensorValue between 900-1100 so divied by 1000 return 0 or 1, evning = 1
   if(isEvning != sensorValue / 1000){
     isEvning = sensorValue / 1000;
     systemChangeDirection();
@@ -62,6 +65,7 @@ void loop() {
   }
 }
 
+// The function change the system direction from it to out or out to in with same change routine
 void systemChangeDirection(){
   if(inGreenLedState == HIGH){
     writeToInState(LOW,HIGH);
@@ -75,6 +79,7 @@ void systemChangeDirection(){
   }
 }
 
+// The function called when out clicked button cliked and change to in direction with same change routine
 void onOutClicked(){
    writeToInState(LOW, HIGH);
    delay(3000);
@@ -85,6 +90,7 @@ void onOutClicked(){
    writeToInState(HIGH, LOW);
 }
 
+// The function called when in clicked button cliked and change to out direction with same change routine
 void onInClicked(){
    writeToOutState(LOW, HIGH);
    delay(3000);
@@ -95,17 +101,21 @@ void onInClicked(){
    writeToOutState(HIGH, LOW);
 }
 
+// The function write to green and red leds the states
 void writeToOutState(int greenState,int redState){
   outGreenLedState = greenState;
   outRedLedState = redState;
   writeToLeds();
 }
 
+// The function write red and green state to in led state
 void writeToInState(int greenState,int redState){
   inGreenLedState = greenState;
   inRedLedState = redState;
   writeToLeds();
 }
+
+// The function write to 2 in green, red leds and 2 out green, red leds the states
 
 void writeToLeds(){
   digitalWrite(IN_GREEN_LED_PIN, inGreenLedState);
